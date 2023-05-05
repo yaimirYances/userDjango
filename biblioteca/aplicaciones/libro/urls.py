@@ -8,4 +8,5 @@ urlpatterns = [
     path('libros/', views.ListAutores.as_view(), name="libros"),
     path('categorias/', views.ListCategoria.as_view(), name="categorias"),
     path('detalles/<pk>', views.DetalleCategoria.as_view(), name="detalles"),
+    path('librosTrian', views.ListAutoresTriangulacion.as_view(), name="librosTrian"),
 ]

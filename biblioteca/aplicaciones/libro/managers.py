@@ -1,5 +1,8 @@
 from django.db import models
 from django.db.models import Q
+from django.db.models import Count
+
+from django.contrib.postgres.search import TrigramSimilarity
 
 class LibroManager(models.Manager):
     
@@ -8,6 +11,15 @@ class LibroManager(models.Manager):
             titulo__icontains = nombre,
         )
         return resultado
+    
+    def BuscarLibros_Fecha_Triangulacion(self, nombre):
+        if nombre:
+            resultado = self.filter(
+                titulo__trigram_similar = nombre,
+            )
+            return resultado
+        else:
+            return self.all() [:10]
     
     def BuscarLibros_FechaIF(self, nombre, fecha_i, fecha_f):
         resultado = self.filter(
@@ -26,6 +38,21 @@ class LibroManager(models.Manager):
         libro = self.get(id = idLibro)
         libro.autores.add(autor)
         return libro
+    
+    def libros_num_prestamos(self):
+        resultado = self.aggregate(
+            num_prestamos = Count('prestamosLibros')
+        )
+        return resultado
+    
+    def libros_promedio_edades(selt):
+        resultado = selt.annotate(
+            num_prestados = Count('prestamosLibros')
+        )
+        for r in resultado:
+            print("="*48)
+            print(r, r.num_prestados)
+        return resultado
         
 class CategoriaManager(models.Manager):
     def categoria_Autor(self, autor):

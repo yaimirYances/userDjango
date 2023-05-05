@@ -26,10 +26,12 @@ class Libro(models.Model):
     fecha = models.DateField("Fecha de lanzamiento")
     portada = models.ImageField(upload_to="portada")
     visitas = models.PositiveBigIntegerField()
+    stock = models.PositiveBigIntegerField(default=0)
     
     class Meta:
         verbose_name = 'Libro'
         verbose_name_plural = 'Libros'
+        ordering = ['titulo']
         
     objects = LibroManager()
 

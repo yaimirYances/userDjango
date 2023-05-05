@@ -1,0 +1,21 @@
+mkdir resguardo -- crear carpeta
+chmood 777 resguardo/ -- dar todos los permisos
+
+creando copia de seguridad
+sudo su postgres -- entrando al usuario
+pg_dump bibliotecadb > copiabibliotecadb-- creando la copia
+
+restableciendo la base de datos
+SELECT * FROM pg_stat_activity WHERE datname='MyDatabase'; --reemplazar MyDatabase con el nombre de la base de datos con problemas
+select pg_terminate_backend(pid) from pg_stat_activity where datname='MyDatabase'; --reemplazar MyDatabase con el nombre de la base de datos con problemas
+DROP DATABASE "MyDatabase";
+dropdb biblioteca -- eliminado la base de datos
+createdb bibliotecadb -- creando base de datos
+psql bibliotecadb -- entrando a la base de datos
+alter user usuario with password 'contraseña';
+---salimos al usuario postgres---
+psql bibliotecadb < copiabibliotecadb
+
+
+---haciendo falsa migracion en django---
+python manage.py migrate --fake

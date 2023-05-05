@@ -18,6 +18,16 @@ class ListAutores(ListView):
             return Libro.objects.BuscarLibros_Fecha(palabra)
         
 
+class ListAutoresTriangulacion(ListView):
+    model = Libro
+    template_name = "libro/trian_libros.html"
+    context_object_name = "libros"
+    
+    def get_queryset(self):
+        palabra = self.request.GET.get("nombre", "")
+        return Libro.objects.BuscarLibros_Fecha_Triangulacion(palabra)
+        
+
 class ListCategoria(ListView):
     model = Libro
     template_name = "libro/categorias.html"
