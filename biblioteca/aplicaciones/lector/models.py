@@ -3,6 +3,7 @@ from aplicaciones.libro.models import Libro
 from aplicaciones.autor.models import Persona
 from .managers import PrestamoManager
 # Create your models here.
+from django.db.models.signals import post_delete
 
 class Lector(Persona):
 
@@ -32,3 +33,11 @@ class Prestamo(models.Model):
 
     def __str__(self):
         return self.libro.titulo
+    
+    
+def update_libro_stock(sender, instance, **kwargs):
+    print("*"*25)
+    instance.libro.stock = instance.libro.stock + 1
+    instance.libro.save()
+    
+post_delete.connect(update_libro_stock, sender=Prestamo)
